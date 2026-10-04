@@ -2,7 +2,7 @@
 
 Independent implementation of IETF EP-AEC (`draft-schrock-ep-authorization-evidence-chain`), built from the spec text alone. **Revision-pinned:** default behavior implements **-02** (all findings reproduce); `spec_revision="07"` implements the current draft (labels display-only, chain requirement descriptive-only, §8 grammar). Live discussion: [emiliaprotocol/emilia-protocol#864](https://github.com/emiliaprotocol/emilia-protocol/issues/864).
 
-**What this is:** a Python verifier built from the spec text alone (no reference to the author's implementations), with 63 conformance vectors (56 × -02, 7 × -07) and 4 adversarial probes. Sections F (§8 effect attestation) and G (§9 ceremony evidence) are **-02-only** vectors — those definitions were removed from AEC in -03, kept byte-identical and clearly separated.
+**What this is:** a Python verifier built from the spec text alone (no reference to the author's implementations), with 64 conformance vectors (56 × -02, 8 × selected -07 regressions in section J) and 4 adversarial probes. Sections F (§8 effect attestation) and G (§9 ceremony evidence) are **-02-only** vectors — those definitions were removed from AEC in -03, kept byte-identical and clearly separated. Prerequisite: `PyNaCl` (`pip install -r requirements.txt`). Known -07 gaps (not yet implemented, stated plainly): the port does not take the relying party's expected action, and still requires the presenter requirement field that -07 makes optional.
 
 **What it found:** one security-relevant bypass in the spec text (F1 — presenter-controlled label satisfies a required component type). See [the report](results/CONFORMANCE-REPORT-2026-09-26.md).
 
@@ -12,10 +12,10 @@ Independent implementation of IETF EP-AEC (`draft-schrock-ep-authorization-evide
 
 ```bash
 pip install -e ".[dev]"
-pytest tests/test_conformance.py -v   # 63 vectors: 56 (-02) + 7 (-07, section J)
+pytest tests/test_conformance.py -v   # 64 vectors: 56 (-02) + 8 (selected -07 regressions, section J)
 ```
 
-56 -02 vectors, all passing, plus 7 -07 vectors (section J). Sections §2, §4, §5, §6, §8 (-02-only), §9 (-02-only), plus fail-closed behavior and one security-relevant spec-defect probe. Pass `spec_revision="07"` (or `Policy(spec_revision="07")`) for current-draft semantics.
+56 -02 vectors, all passing, plus 8 selected -07 regression vectors (section J, not full -07 conformance). Sections §2, §4, §5, §6, §8 (-02-only), §9 (-02-only), plus fail-closed behavior and one security-relevant spec-defect probe. Pass `spec_revision="07"` (or `Policy(spec_revision="07")`, or `"spec_revision": "07"` in a CLI policy file) for current-draft semantics.
 
 ## Adversarial probes
 

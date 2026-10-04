@@ -649,6 +649,44 @@ def test_j7_unknown_revision_rejected():
                      REG, POLICY, spec_revision="99")
 
 
+def test_j8_cli_forwards_spec_revision(tmp_path):
+    """
+    J8 (author-reported, issue #864): the CLI must forward spec_revision
+    from the policy file. The same labelled delegation chain ALLOWs under
+    -02 and DENYs under -07. Failed before the __main__ fix (both ALLOWed).
+    """
+    import subprocess
+    leg = signed({"signer": "agent-1", "action_digest": DIGEST}, AGENT)
+    attack = {
+        "@version": "EP-AEC-v1", "action": ACTION,
+        "requirement": "delegation",
+        "components": [{"type": "delegation", "label": "ep-quorum",
+                        "evidence": leg}],
+    }
+    chain_p = tmp_path / "chain.json"
+    chain_p.write_text(json.dumps(attack))
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+
+    results = {}
+    for rev in ("02", "07"):
+        pol = {
+            "requirement": "delegation AND ep-quorum",
+            "pinned_executor_keys": {"agent-1": pk(AGENT),
+                                     "executor-1": pk(EXEC)},
+            "spec_revision": rev,
+        }
+        pol_p = tmp_path / ("policy-%s.json" % rev)
+        pol_p.write_text(json.dumps(pol))
+        proc = subprocess.run(
+            [sys.executable, "-m", "verifier", "verify",
+             str(chain_p), "--policy", str(pol_p)],
+            cwd=root, capture_output=True, text=True)
+        results[rev] = proc.returncode
+
+    assert results["02"] == 0, "-02 CLI must ALLOW the labelled chain (F1 reproduces)"
+    assert results["07"] == 1, "-07 CLI must DENY the labelled chain (display-only)"
+
+
 # ===========================================================================
 # backward-compatible standalone runner
 # ===========================================================================

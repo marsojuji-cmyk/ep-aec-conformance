@@ -38,6 +38,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
             pinned_executor_keys=pdata.get("pinned_executor_keys", {}),
             ceremony_min_review_sec=pdata.get("ceremony_min_review_sec"),
             authorizations=pdata.get("authorizations", {}),
+            spec_revision=pdata.get("spec_revision", "02"),
         )
 
     result = verify_chain(chain, default_registry(), policy)
