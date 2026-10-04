@@ -12,7 +12,7 @@ Independent implementation of IETF EP-AEC (`draft-schrock-ep-authorization-evide
 
 ```bash
 pip install -e ".[dev]"
-pytest tests/test_conformance.py -v   # 64 vectors: 56 (-02) + 8 (selected -07 regressions, section J)
+python3 -m pytest tests/test_conformance.py -v   # 64 vectors: 56 (-02) + 8 (selected -07 regressions, section J)
 ```
 
 56 -02 vectors, all passing, plus 8 selected -07 regression vectors (section J, not full -07 conformance). Sections §2, §4, §5, §6, §8 (-02-only), §9 (-02-only), plus fail-closed behavior and one security-relevant spec-defect probe. Pass `spec_revision="07"` (or `Policy(spec_revision="07")`, or `"spec_revision": "07"` in a CLI policy file) for current-draft semantics.
@@ -73,14 +73,11 @@ results/
 ## Reproducing the findings
 
 ```bash
-# conformance vectors (56 pytest tests)
-pytest tests/test_conformance.py -v
+# conformance vectors (64 tests: 56 -02 + 8 selected -07 regressions)
+python3 -m pytest tests/test_conformance.py -v
 
 # adversarial probes (4 probes, 4 findings)
 python3 verifier/probe.py
-
-# or the original standalone runner
-python3 tests/test_conformance.py
 ```
 
 Every input is printed in the logs. One machine, one command, one result.
