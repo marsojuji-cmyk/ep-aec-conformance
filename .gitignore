@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.hermes/
+marsojuji-cmyk/
+calgary-portfolio-sources.json
+formats/

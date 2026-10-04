@@ -1,0 +1,7 @@
+{
+  "implementation": "darpa-seat/independent-python",
+  "spec": "draft-schrock-ep-authorization-evidence-chain-02",
+  "passed": 63,
+  "total": 63,
+  "vectors": []
+}

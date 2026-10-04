@@ -1,0 +1,42 @@
+==========================================================================
+ADVERSARIAL PROBES — EP-AEC draft-02, independent implementation
+==========================================================================
+
+--- P1: label/type namespace collision in the satisfied set ---
+      honest chain (1 delegation leg, no quorum) : DENY
+      attacker chain (same leg, label='ep-quorum'): ALLOW
+
+[P1] Presenter-controlled label satisfies a required component TYPE
+      -> ATTACK SUCCEEDS -- finding
+      Requirement 'delegation AND ep-quorum' has NO human leg in the attacker chain; the only difference is a label string. VERDICT: honest=DENY attacker=ALLOW. Cause: §4 step 3.4 puts type and label into one satisfied set, and §5 resolves IDENT against both.
+
+--- P2: cross-binding defense depends on component formats signing the action ---
+      ONE signature, small action (3 units)      : ALLOW
+      ONE signature, BIG action (3,000,000 units): ALLOW
+
+[P2] Cross-binding defense is only as strong as each component's signature coverage
+      -> ATTACK SUCCEEDS -- finding
+      A component format that omits the action binding from its signed body lets ONE valid signature authorize TWO different actions -- both chains return ALLOW. EP-AEC's core defense (§4 step 3.3) is therefore conditional on a property the spec explicitly declines to define (§1.1). Architectural boundary, not an implementation bug -- but 'EP-AEC conformant' alone does NOT imply cross-binding safety, and the draft should say so in Security Considerations.
+
+--- P3: §5 IDENT cannot express labels containing spaces ---
+      requirement 'two-person human authorization' -> RequirementSyntaxError: trailing tokens at position 1: ['human', 'authorization']
+
+[P3] §3's own example label is unreferenceable by §5's grammar
+      -> ATTACK SUCCEEDS -- finding
+      §3 shows label="two-person human authorization". §5's grammar defines IDENT as one token and the expression tokenises on whitespace, so that label can never appear in a requirement. Labels are usable only if they contain no spaces. Spec inconsistency; fix is to quote or escape IDENT.
+
+--- P4: the left-to-right precedence trap ---
+      'a OR b AND c' over {'a'}  conformant(LTR)=False   naive(precedence)=True
+
+[P4] Conformant left-to-right evaluation diverges from conventional precedence
+      -> ATTACK SUCCEEDS -- finding
+      Same expression, same satisfied set, opposite verdicts. This is a deliberate spec choice, and it is the single most likely interoperability failure for independent implementations. Recommend the draft publish this exact vector.
+
+==========================================================================
+PROBE SUMMARY — 4 probe(s), 4 finding(s)
+  P1   FINDING  Presenter-controlled label satisfies a required component TYPE
+  P2   FINDING  Cross-binding defense is only as strong as each component's signature coverage
+  P3   FINDING  §3's own example label is unreferenceable by §5's grammar
+  P4   FINDING  Conformant left-to-right evaluation diverges from conventional precedence
+==========================================================================
+wrote results/probe-run-02.json

@@ -1,0 +1,492 @@
+{
+  "implementation": "darpa-seat/independent-python",
+  "spec": "draft-schrock-ep-authorization-evidence-chain-02",
+  "passed": 59,
+  "total": 59,
+  "vectors": [
+    {
+      "vector": "A1",
+      "section": "JCS",
+      "description": "member order is by UTF-16 code unit, not insertion",
+      "expected": "{\"a\":2,\"b\":1}",
+      "got": "{\"a\":2,\"b\":1}",
+      "pass": true
+    },
+    {
+      "vector": "A2",
+      "section": "JCS",
+      "description": "no insignificant whitespace",
+      "expected": "{\"a\":[1,2],\"b\":{\"c\":true}}",
+      "got": "{\"a\":[1,2],\"b\":{\"c\":true}}",
+      "pass": true
+    },
+    {
+      "vector": "A3",
+      "section": "JCS",
+      "description": "string escaping: quote/backslash/control",
+      "expected": "{\"k\":\"a\\\"b\\\\c\\nd\\u0001\"}",
+      "got": "{\"k\":\"a\\\"b\\\\c\\nd\\u0001\"}",
+      "pass": true
+    },
+    {
+      "vector": "A4",
+      "section": "JCS",
+      "description": "astral vs BMP ordering follows UTF-16, not code point",
+      "expected": "{\"\ud800\udc00\":2,\"\ufffd\":1}",
+      "got": "{\"\ud800\udc00\":2,\"\ufffd\":1}",
+      "pass": true
+    },
+    {
+      "vector": "A5",
+      "section": "JCS",
+      "description": "negative zero-free integer handling",
+      "expected": "{\"n\":-17}",
+      "got": "{\"n\":-17}",
+      "pass": true
+    },
+    {
+      "vector": "A6",
+      "section": "JCS",
+      "description": "1 / 1.0 / 1e0 pin ONE canonical serialization",
+      "expected": 1,
+      "got": 1,
+      "pass": true
+    },
+    {
+      "vector": "A6b",
+      "section": "JCS",
+      "description": "\u2026and that serialization is {\"n\":1}",
+      "expected": "{\"n\":1}",
+      "got": "{\"n\":1}",
+      "pass": true
+    },
+    {
+      "vector": "A6c",
+      "section": "JCS",
+      "description": "-0 and -0.0 normalise to 0 (ES6)",
+      "expected": "{\"n\":0}",
+      "got": "{\"n\":0}",
+      "pass": true
+    },
+    {
+      "vector": "A7",
+      "section": "JCS",
+      "description": "integer above safe range rejected",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "A7",
+      "section": "JCS",
+      "description": "overflow to infinity rejected",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "A7",
+      "section": "JCS",
+      "description": "NaN rejected",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "A8",
+      "section": "JCS",
+      "description": "nesting deeper than 64 rejected",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "A8b",
+      "section": "JCS",
+      "description": "nesting within 64 accepted",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "A9",
+      "section": "JCS",
+      "description": "duplicate member names REJECTED (forgery primitive)",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "B1",
+      "section": "\u00a75",
+      "description": "a OR b AND c with {a} -> LTR ((a OR b) AND c) = FALSE",
+      "expected": false,
+      "got": false,
+      "pass": true
+    },
+    {
+      "vector": "B2",
+      "section": "\u00a75",
+      "description": "a AND b OR c with {c} -> LTR ((a AND b) OR c) = TRUE",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "B3",
+      "section": "\u00a75",
+      "description": "parentheses are the only precedence mechanism",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "B4",
+      "section": "\u00a75",
+      "description": "unknown identifier evaluates to FALSE",
+      "expected": false,
+      "got": false,
+      "pass": true
+    },
+    {
+      "vector": "B5",
+      "section": "\u00a75",
+      "description": "chain of three, strict LTR",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "C1",
+      "section": "\u00a74.1",
+      "description": "missing @version -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "C2",
+      "section": "\u00a74.2",
+      "description": "declared action_digest mismatch -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "C3",
+      "section": "\u00a74.1",
+      "description": "empty components -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "C4",
+      "section": "\u00a74.1",
+      "description": "missing/empty requirement -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "C5",
+      "section": "\u00a74.3.1",
+      "description": "no registered verifier -> unsatisfied -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "C5b",
+      "section": "\u00a74.3.1",
+      "description": "reason recorded as 'no verifier'",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "C6",
+      "section": "\u00a74",
+      "description": "matching action_digest + valid leg -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "D1",
+      "section": "\u00a74.3.3",
+      "description": "valid receipt binding a DIFFERENT action -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "D1b",
+      "section": "\u00a74.3.3",
+      "description": "reason recorded as 'binds a different action'",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "D1c",
+      "section": "\u00a74.3.3",
+      "description": "component verified but NOT bound",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "E1",
+      "section": "\u00a76",
+      "description": "presenter's weak bar, no pin -> ALLOW (source=presenter)",
+      "expected": [
+        "ALLOW",
+        "presenter"
+      ],
+      "got": [
+        "ALLOW",
+        "presenter"
+      ],
+      "pass": true
+    },
+    {
+      "vector": "E2",
+      "section": "\u00a76",
+      "description": "presenter weak bar would PASS, pinned bar correctly FAILS",
+      "expected": [
+        "DENY",
+        "relying_party"
+      ],
+      "got": [
+        "DENY",
+        "relying_party"
+      ],
+      "pass": true
+    },
+    {
+      "vector": "E3",
+      "section": "\u00a76",
+      "description": "pinned two-leg bar with matching commitment -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "F1a",
+      "section": "\u00a78",
+      "description": "executor signature does not verify -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "F1b",
+      "section": "\u00a78",
+      "description": "invalid signature is UNVERIFIABLE, not 'conflicted'",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "F1c",
+      "section": "\u00a78",
+      "description": "invalid attestation NOT weighed as effect evidence",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "F2",
+      "section": "\u00a78",
+      "description": "executor key NOT pinned -> inadmissible -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "F3a",
+      "section": "\u00a78",
+      "description": "observed != committed -> DENY (despite satisfied requirement)",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "F3b",
+      "section": "\u00a78",
+      "description": "reason code effect_divergence recorded",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "F3c",
+      "section": "\u00a78",
+      "description": "component verdict is 'conflicted'",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "F4",
+      "section": "\u00a78",
+      "description": "verified attestation with no observed digest -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "F5a",
+      "section": "\u00a78",
+      "description": "no committed digest to compare -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "F5b",
+      "section": "\u00a78",
+      "description": "reason code effect_commitment_missing recorded",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "F6",
+      "section": "\u00a78",
+      "description": "relying-party pin wins, matching -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "F7",
+      "section": "\u00a78",
+      "description": "prefix optional on either side of the comparison -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "F8",
+      "section": "\u00a78",
+      "description": "attestation binding a different action -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "G1",
+      "section": "\u00a79",
+      "description": "review interval above floor -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "G2a",
+      "section": "\u00a79",
+      "description": "interval strictly below floor -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "G2b",
+      "section": "\u00a79",
+      "description": "reason code rubber_stamped_ceremony recorded",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "G3a",
+      "section": "\u00a79",
+      "description": "unusable telemetry -> DENY, never a silent pass",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "G3b",
+      "section": "\u00a79",
+      "description": "reason code ceremony_telemetry_missing recorded",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "G4",
+      "section": "\u00a79",
+      "description": "approved_at earlier than viewed_at -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "G5",
+      "section": "\u00a79",
+      "description": "bad signature -> DENY and UNVERIFIABLE (never softened)",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "G5b",
+      "section": "\u00a79",
+      "description": "verdict is UNVERIFIABLE, not conflicted",
+      "expected": true,
+      "got": true,
+      "pass": true
+    },
+    {
+      "vector": "G6",
+      "section": "\u00a79",
+      "description": "no floor set -> no judgment attached -> ALLOW",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "pass": true
+    },
+    {
+      "vector": "H1",
+      "section": "\u00a74.5",
+      "description": "component verifier raises -> DENY, not a crash",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "H2",
+      "section": "\u00a74.5",
+      "description": "verifier returns malformed result -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "H3",
+      "section": "\u00a74.3.3",
+      "description": "verifier returns valid but no digest -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "H4",
+      "section": "\u00a75",
+      "description": "malformed requirement expression -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    },
+    {
+      "vector": "H5",
+      "section": "\u00a72",
+      "description": "Action Object outside I-JSON (unsafe int) -> DENY",
+      "expected": "DENY",
+      "got": "DENY",
+      "pass": true
+    }
+  ]
+}

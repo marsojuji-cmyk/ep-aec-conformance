@@ -1,0 +1,80 @@
+
+=== A. RFC 8785 JCS (the digest everything depends on) ===
+  [PASS] A1     JCS       member order is by UTF-16 code unit, not insertion
+  [PASS] A2     JCS       no insignificant whitespace
+  [PASS] A3     JCS       string escaping: quote/backslash/control
+  [PASS] A4     JCS       astral vs BMP ordering follows UTF-16, not code point
+  [PASS] A5     JCS       negative zero-free integer handling
+  [PASS] A6     JCS       1 / 1.0 / 1e0 pin ONE canonical serialization
+  [PASS] A6b    JCS       …and that serialization is {"n":1}
+  [PASS] A6c    JCS       -0 and -0.0 normalise to 0 (ES6)
+  [PASS] A7     JCS       integer above safe range rejected
+  [PASS] A7     JCS       overflow to infinity rejected
+  [PASS] A7     JCS       NaN rejected
+  [PASS] A8     JCS       nesting deeper than 64 rejected
+  [PASS] A8b    JCS       nesting within 64 accepted
+  [PASS] A9     JCS       duplicate member names REJECTED (forgery primitive)
+
+=== B. §5 requirement expressions — the left-to-right trap ===
+  [PASS] B1     §5        a OR b AND c with {a} -> LTR ((a OR b) AND c) = FALSE
+  [PASS] B2     §5        a AND b OR c with {c} -> LTR ((a AND b) OR c) = TRUE
+  [PASS] B3     §5        parentheses are the only precedence mechanism
+  [PASS] B4     §5        unknown identifier evaluates to FALSE
+  [PASS] B5     §5        chain of three, strict LTR
+
+=== C. §4 algorithm — structural and digest failures ===
+  [PASS] C1     §4.1      missing @version -> DENY
+  [PASS] C2     §4.2      declared action_digest mismatch -> DENY
+  [PASS] C3     §4.1      empty components -> DENY
+  [PASS] C4     §4.1      missing/empty requirement -> DENY
+  [PASS] C5     §4.3.1    no registered verifier -> unsatisfied -> DENY
+  [PASS] C5b    §4.3.1    reason recorded as 'no verifier'
+  [PASS] C6     §4        matching action_digest + valid leg -> ALLOW
+
+=== D. §4 step 3.3 — the CROSS-BINDING defense ===
+  [PASS] D1     §4.3.3    valid receipt binding a DIFFERENT action -> DENY
+  [PASS] D1b    §4.3.3    reason recorded as 'binds a different action'
+  [PASS] D1c    §4.3.3    component verified but NOT bound
+
+=== E. §6 — relying-party requirement precedence (confused deputy) ===
+  [PASS] E1     §6        presenter's weak bar, no pin -> ALLOW (source=presenter)
+  [PASS] E2     §6        presenter weak bar would PASS, pinned bar correctly FAILS
+  [PASS] E3     §6        pinned two-leg bar with matching commitment -> ALLOW
+
+=== F. §8 Effect Attestation — the rules with no cross-language vectors ===
+  [PASS] F1a    §8        executor signature does not verify -> DENY
+  [PASS] F1b    §8        invalid signature is UNVERIFIABLE, not 'conflicted'
+  [PASS] F1c    §8        invalid attestation NOT weighed as effect evidence
+  [PASS] F2     §8        executor key NOT pinned -> inadmissible -> DENY
+  [PASS] F3a    §8        observed != committed -> DENY (despite satisfied requirement)
+  [PASS] F3b    §8        reason code effect_divergence recorded
+  [PASS] F3c    §8        component verdict is 'conflicted'
+  [PASS] F4     §8        verified attestation with no observed digest -> DENY
+  [PASS] F5a    §8        no committed digest to compare -> DENY
+  [PASS] F5b    §8        reason code effect_commitment_missing recorded
+  [PASS] F6     §8        relying-party pin wins, matching -> ALLOW
+  [PASS] F7     §8        prefix optional on either side of the comparison -> ALLOW
+  [PASS] F8     §8        attestation binding a different action -> DENY
+
+=== G. §9 Ceremony Evidence — also no cross-language vectors ===
+  [PASS] G1     §9        review interval above floor -> ALLOW
+  [PASS] G2a    §9        interval strictly below floor -> DENY
+  [PASS] G2b    §9        reason code rubber_stamped_ceremony recorded
+  [PASS] G3a    §9        unusable telemetry -> DENY, never a silent pass
+  [PASS] G3b    §9        reason code ceremony_telemetry_missing recorded
+  [PASS] G4     §9        approved_at earlier than viewed_at -> DENY
+  [PASS] G5     §9        bad signature -> DENY and UNVERIFIABLE (never softened)
+  [PASS] G5b    §9        verdict is UNVERIFIABLE, not conflicted
+  [PASS] G6     §9        no floor set -> no judgment attached -> ALLOW
+
+=== H. fail-closed — §4 step 5: any unexpected error MUST yield DENY ===
+  [PASS] H1     §4.5      component verifier raises -> DENY, not a crash
+  [PASS] H2     §4.5      verifier returns malformed result -> DENY
+  [PASS] H3     §4.3.3    verifier returns valid but no digest -> DENY
+  [PASS] H4     §5        malformed requirement expression -> DENY
+  [PASS] H5     §2        Action Object outside I-JSON (unsafe int) -> DENY
+
+========================================================================
+EP-AEC CONFORMANCE — 59/59 vectors pass
+========================================================================
+wrote results/conformance-run-02.json

@@ -1,0 +1,30 @@
+{
+  "spec": "draft-schrock-ep-authorization-evidence-chain-02",
+  "implementation": "darpa-seat/independent-python",
+  "probes": [
+    {
+      "probe": "P1",
+      "title": "Presenter-controlled label satisfies a required component TYPE",
+      "attack_succeeded": true,
+      "detail": "Requirement 'delegation AND ep-quorum' has NO human leg in the attacker chain; the only difference is a label string. VERDICT: honest=DENY attacker=ALLOW. Cause: \u00a74 step 3.4 puts type and label into one satisfied set, and \u00a75 resolves IDENT against both."
+    },
+    {
+      "probe": "P2",
+      "title": "Cross-binding defense is only as strong as each component's signature coverage",
+      "attack_succeeded": true,
+      "detail": "A component format that omits the action binding from its signed body lets ONE valid signature authorize TWO different actions -- both chains return ALLOW. EP-AEC's core defense (\u00a74 step 3.3) is therefore conditional on a property the spec explicitly declines to define (\u00a71.1). Architectural boundary, not an implementation bug -- but 'EP-AEC conformant' alone does NOT imply cross-binding safety, and the draft should say so in Security Considerations."
+    },
+    {
+      "probe": "P3",
+      "title": "\u00a73's own example label is unreferenceable by \u00a75's grammar",
+      "attack_succeeded": true,
+      "detail": "\u00a73 shows label=\"two-person human authorization\". \u00a75's grammar defines IDENT as one token and the expression tokenises on whitespace, so that label can never appear in a requirement. Labels are usable only if they contain no spaces. Spec inconsistency; fix is to quote or escape IDENT."
+    },
+    {
+      "probe": "P4",
+      "title": "Conformant left-to-right evaluation diverges from conventional precedence",
+      "attack_succeeded": true,
+      "detail": "Same expression, same satisfied set, opposite verdicts. This is a deliberate spec choice, and it is the single most likely interoperability failure for independent implementations. Recommend the draft publish this exact vector."
+    }
+  ]
+}
