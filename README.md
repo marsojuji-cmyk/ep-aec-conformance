@@ -82,6 +82,10 @@ python3 verifier/probe.py
 
 Every input is printed in the logs. One machine, one command, one result.
 
+## Case study
+
+[Independent verification and maintainer review](CASE-STUDY.md): the historical finding, the CLI regression, the independent rerun, and the limits of the result, with links to the public evidence.
+
 ## License
 
 MIT
