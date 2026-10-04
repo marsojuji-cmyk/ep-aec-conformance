@@ -208,4 +208,24 @@ Each iteration is triggered by an external event, not by internal ambition. That
 **Rollback:** every mutation logged here with its URL; gists/branches deletable on Marc's word; issue comments editable via `gh`.
 **Falsifier:** any mutation without a receipt URL in this log = violation → grant collapses to ask-everything instantly.
 
+**Receipts under this grant:**
+- 2026-10-03 ~23:30 MDT — created public repo + pushed tree: https://github.com/marsojuji-cmyk/ep-aec-conformance (commit `10e9f0f`, 36 files; excluded: nested empty `marsojuji-cmyk/` clone, `calgary-portfolio-sources.json`, `.hermes/`, caches). Per Marc's "push it to public."
+- 2026-10-03 ~23:45 MDT — pushed commit `51380ff` (CLI spec_revision fix + J8 + coverage honesty). Per author's Iteration-5 ask on #864.
+
+---
+
+## Iteration 5 — The author's regression (2026-10-04)
+
+**What happened:** Iman reran commit `10e9f0f`: 63/63 passed, 4 probes reproduced, -07 mode correct — and found one real bug: the CLI dropped `spec_revision` from the policy file, so `-07` via CLI silently used -02 rules (ALLOW on the label attack). Supplied the exact one-line fix plus a failing-first CLI regression design.
+
+**What we built (Cursor lane `blocker=host-hold`, pulse critical — in-lane under documented exception):**
+- One-line fix: `spec_revision=pdata.get("spec_revision", "02")` in `cmd_verify`
+- J8: end-to-end CLI regression (same labelled chain: ALLOW under -02, DENY under -07) — proven to fail with the line removed, pass with it restored
+- Coverage honesty per author's framing: "selected -07 regressions, not full conformance"; two known -07 gaps named (no RP expected action; presenter requirement still required); PyNaCl prerequisite stated up front
+- Pushed `51380ff`; reply posted to the thread
+
+**Verification:** 64/64 pytest · 4/4 probes (-02 mode) · EP-CANONICALIZATION-v1 35/35 (untouched)
+
+**What wants to happen next:** author's rerun of `51380ff` dictates Iteration 6. The two named -07 gaps (expected-action input, optional chain requirement) are the obvious candidates — but only if pulled, not pushed.
+
 ---
