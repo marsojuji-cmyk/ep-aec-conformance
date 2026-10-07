@@ -63,15 +63,14 @@ tests/
 
 METHODOLOGY.md         # How to find spec defects
 README.md              # Stranger-facing documentation
-ITERATION-LOG.md       # Iteration history
 ```
 
 ---
 
-## How to Reproduce (local tree — source not yet published, no install needed)
+## How to Reproduce (no install needed)
 
 ```bash
-cd /Users/user/.hermes/profiles/darpa/workspace/receipt-conformance
+cd ep-aec-conformance   # your clone of this repository
 
 # Run conformance vectors
 python3 -m pytest tests/test_conformance.py -v   # 63 vectors
@@ -106,7 +105,6 @@ python3 -m verifier verify chain.json --policy policy.json
 
 ### Iteration 3 — Discoverability
 - Generated this report
-- Prepared for sharing on Grok.com
 - Product is stable and ready for external input
 
 ---
@@ -116,7 +114,6 @@ python3 -m verifier verify chain.json --policy policy.json
 1. **Wait for EMILIA author's response** to issue #864
 2. **If they engage** → iterate on their feedback
 3. **If silence after 7 days** → iterate on discoverability
-4. **Record outcomes on Grok.com** when Grok Build limit resets
 
 ---
 
